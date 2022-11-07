@@ -20,6 +20,7 @@ export class NewRelicDemoAppStack extends cdk.Stack {
 				LAUNCHDARKLY_SDK_KEY: process.env.LAUNCHDARKLY_SDK_KEY ?? '',
 				NEW_RELIC_LAMBDA_HANDLER: 'index.handler',
 				NEW_RELIC_ACCOUNT_ID: process.env.NEW_RELIC_ACCOUNT_ID ?? '',
+				LAUNCHDARKLY_FLAG_KEY: process.env.LAUNCHDARKLY_FLAG_KEY ?? '',
 			},
 			runtime: Runtime.NODEJS_16_X,
 			layers: [
