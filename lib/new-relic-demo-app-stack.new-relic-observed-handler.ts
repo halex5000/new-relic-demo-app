@@ -51,16 +51,38 @@ const handler = async (event: Event) => {
 
 		const flagValue = await launchDarklyClient.variation(featureFlagKey, user, false) as boolean;
 
-		const goodMetric = getRandomInteger(successRateMin, successRateMax);
-		let badMetric = 0;
+		// Const goodMetric = getRandomInteger(successRateMin, successRateMax);
+		// let badMetric = 0;
 
-		badMetric = flagValue ? getRandomInteger(errorRateMin + errorRateBump, errorRateMax + errorRateBump) : getRandomInteger(errorRateMin, errorRateMax);
+		// badMetric = flagValue ? getRandomInteger(errorRateMin + errorRateBump, errorRateMax + errorRateBump) : getRandomInteger(errorRateMin, errorRateMax);
 
-		newRelic.recordMetric('failedCalls', badMetric);
-		newRelic.recordMetric('successfulCalls', goodMetric);
+		// // NewRelic.recordMetric('failedCalls', badMetric);
+		// // newRelic.recordMetric('successfulCalls', goodMetric);
 
-		newRelic.addCustomAttribute('apiErrors', badMetric);
-		newRelic.addCustomAttribute('apiSuccess', goodMetric);
+		// // NewRelic.addCustomAttribute('apiErrors', badMetric);
+		// // newRelic.addCustomAttribute('apiSuccess', goodMetric);
+
+		// newRelic.recordCustomEvent('ApiRequestCompleted', {
+		// 	failedRequests: badMetric,
+		// 	successfulRequests: goodMetric,
+		// });
+		if (flagValue) {
+			newRelic.addCustomAttribute('requestResult', 500);
+			return {
+				statusCode: 500,
+				body: JSON.stringify({
+					message: 'sorry, my b, something went wrong',
+				}),
+			};
+		}
+
+		newRelic.addCustomAttribute('requestResult', 200);
+		return {
+			statusCode: 200,
+			body: JSON.stringify({
+				message: 'it is all good bruh',
+			}),
+		};
 	}
 };
 
